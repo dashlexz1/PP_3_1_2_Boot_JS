@@ -14,10 +14,6 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    String getUserRoles(User user);
-
-    void addRoleToUser(String roleName, User user);
-
     public void setHashPassword(User user);
 
     User findById(Long id);

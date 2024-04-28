@@ -14,6 +14,7 @@ import ru.kata.spring.boot_security.demo.entities.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -49,6 +50,7 @@ public class UserServicelmpl implements UserService{
     public void update(User user) {
         user = entitiManager.merge(user);
         setHashPassword(user);
+
     }
 
     @Override
@@ -62,23 +64,6 @@ public class UserServicelmpl implements UserService{
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userRepository.findAll(Sort.by("id"));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public String getUserRoles(User user) {
-        return user.getUserRoles().stream()
-                .map(Role::getRoleName)
-                .collect(Collectors.joining(","));
-    }
-
-    @Override
-    @Transactional
-    public void addRoleToUser(String roleName, User user) {
-        Role role = roleService.findByRole(roleName);
-        user.getUserRoles().add(role);
-        userRepository.save(user);
-
     }
 
     @Override

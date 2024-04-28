@@ -15,6 +15,4 @@ public interface RoleService {
 
     Set<Role> getSetOfRoles(List<String> ids);
 
-    Role findById(Long id);
-
 }

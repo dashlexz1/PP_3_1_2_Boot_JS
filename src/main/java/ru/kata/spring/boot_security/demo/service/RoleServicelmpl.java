@@ -57,9 +57,4 @@ public class RoleServicelmpl implements RoleService{
         return roleSet;
     }
 
-    @Override
-    public Role findById(Long id) {
-        return roleRepository.findById(id).orElse(null);
-    }
-
 }

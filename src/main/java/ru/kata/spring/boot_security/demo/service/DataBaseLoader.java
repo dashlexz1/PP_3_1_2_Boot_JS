@@ -16,8 +16,8 @@ public class DataBaseLoader implements CommandLineRunner {
     private final UserService userService;
     private final RoleService roleService;
     @Autowired
-    public DataBaseLoader(UserService userRepository, RoleService roleRepository) {
-        this.userService = userRepository;
+    public DataBaseLoader(UserService userService, RoleService roleRepository) {
+        this.userService = userService;
         this.roleService = roleRepository;
     }
 
@@ -28,10 +28,10 @@ public class DataBaseLoader implements CommandLineRunner {
         this.roleService.save(adminRole);
         this.roleService.save(userRole);
 
-        User admin = new User("Mark", 20, 2000.00, "fott", "qwerty");
+        User admin = new User("Mark", 20, 2000.00, "tory", "qwerty");
         admin.setUserRoles(new HashSet<>(List.of(adminRole, userRole)));
 
-        User user = new User("Luiza", 16, 2000.00,"kott", "user");
+        User user = new User("Luiza", 16, 2000.00,"kory", "user");
         user.setUserRoles(new HashSet<>(List.of(userRole)));
 
         this.userService.add(admin);
