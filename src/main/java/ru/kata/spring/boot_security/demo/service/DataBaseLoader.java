@@ -23,16 +23,15 @@ public class DataBaseLoader implements CommandLineRunner {
 
     @Override
     public void run(String... strings) {
-        Role adminRole = new Role("ROLE_ADMIN");
-        Role userRole = new Role("ROLE_USER");
-
+        Role adminRole = roleService.findByRole("ROLE_ADMIN");
+        Role userRole = roleService.findByRole("ROLE_USER");
         this.roleService.save(adminRole);
         this.roleService.save(userRole);
 
-        User admin = new User("Mark", 20, 2000.00, "fossy", "qwerty");
+        User admin = new User("Mark", 20, 2000.00, "foot", "qwerty");
         admin.setUserRoles(new HashSet<>(List.of(adminRole, userRole)));
 
-        User user = new User("Luiza", 16, 2000.00,"kosy@mail.ru", "user");
+        User user = new User("Luiza", 16, 2000.00,"koot", "user");
         user.setUserRoles(new HashSet<>(List.of(userRole)));
 
         this.userService.add(admin);

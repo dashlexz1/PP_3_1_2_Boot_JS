@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
-    @Query("select r from Role r left join fetch r.users where r.role = :role")
-    Role findByRole (String role);
+    Role findByRoleName (String role);
+
 
 }

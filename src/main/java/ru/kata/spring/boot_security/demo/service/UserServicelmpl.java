@@ -12,8 +12,11 @@ import ru.kata.spring.boot_security.demo.controller.UserController;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,13 +25,17 @@ public class UserServicelmpl implements UserService{
     private final UserRepository userRepository;
     private final RoleService roleService;
 
+    private EntityManager entitiManager;
+
     private ApplicationContext context;
-    @Autowired
-    public UserServicelmpl(UserRepository userRepository, RoleService roleService, ApplicationContext context) {
+
+    public UserServicelmpl(UserRepository userRepository, RoleService roleService, EntityManager entitiManager, ApplicationContext context) {
         this.userRepository = userRepository;
         this.roleService = roleService;
+        this.entitiManager = entitiManager;
         this.context = context;
     }
+
 
     @Override
     @Transactional
@@ -40,25 +47,8 @@ public class UserServicelmpl implements UserService{
     @Transactional
     @Override
     public void update(User user) {
-        if (user != null) {
-            Optional<User> existingUser = userRepository.findById(user.getId());
-            if(existingUser.isPresent()) {
-                User user1;
-                user1 = existingUser.get();
-                // Обновляем поля пользователя на основе переданных значений
-                user1.setName(user.getName());
-                user1.setUsername(user.getUsername());
-                user1.setAge(user.getAge());
-                user1.setSalary(user.getSalary());
-                user1.setPassword(user1.getPassword());
-
-                for (Role role : user.getUserRoles()) {
-                    user1.getUserRoles().add(role);
-                }
-
-                add(user1);
-            }
-        }
+        user = entitiManager.merge(user);
+        setHashPassword(user);
     }
 
     @Override
@@ -78,7 +68,7 @@ public class UserServicelmpl implements UserService{
     @Transactional(readOnly = true)
     public String getUserRoles(User user) {
         return user.getUserRoles().stream()
-                .map(Role::getRole)
+                .map(Role::getRoleName)
                 .collect(Collectors.joining(","));
     }
 

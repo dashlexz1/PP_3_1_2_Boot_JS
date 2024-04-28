@@ -20,7 +20,7 @@ public class Role implements GrantedAuthority {
     @Column (name= "id")
     private Long id;
     @Column(name = "role_name",unique = true)
-    private String role;
+    private String roleName;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles"
             , joinColumns = @JoinColumn(name = "role_id")
@@ -28,13 +28,13 @@ public class Role implements GrantedAuthority {
     private Set<User>users;
 
     public Role(String role) {
-        this.role = role;
+        this.roleName = role;
     }
 
 
     @Override
     public String getAuthority() {
-        return role;
+        return roleName;
     }
 
 
@@ -54,7 +54,7 @@ public class Role implements GrantedAuthority {
     @Override
     public String toString() {
         return "Role{" +
-                "role='" + role + '\'' +
+                "role='" + roleName + '\'' +
                 '}';
     }
 }

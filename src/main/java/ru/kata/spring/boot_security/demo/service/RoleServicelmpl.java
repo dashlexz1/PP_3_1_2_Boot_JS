@@ -26,7 +26,7 @@ public class RoleServicelmpl implements RoleService{
     @Override
     @Transactional(readOnly = true)
     public Role findByRole(String role) {
-        return roleRepository.findByRole(role);
+        return roleRepository.findByRoleName(role);
     }
 
     @Override
