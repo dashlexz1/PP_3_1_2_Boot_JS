@@ -67,7 +67,7 @@ public class AdminController {
     @GetMapping("/{id}/edit")
     public ModelAndView editUser(@PathVariable(name = "id") Long id) {
         User user = userService.findById(id);
-        userService.setHashPassword(user);
+//        userService.setHashPassword(user);
         ModelAndView mav = new ModelAndView("adminspage");
         mav.addObject("user", user);
         List<Role> roles = roleService.findAll();
