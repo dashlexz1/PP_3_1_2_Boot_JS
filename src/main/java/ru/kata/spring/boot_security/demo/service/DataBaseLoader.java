@@ -28,10 +28,10 @@ public class DataBaseLoader implements CommandLineRunner {
         this.roleService.save(adminRole);
         this.roleService.save(userRole);
 
-        User admin = new User("Mark", 20, 2000.00, "tory", "qwerty");
+        User admin = new User("Mark", 20, 2000.00, "toryu", "qwerty");
         admin.setUserRoles(new HashSet<>(List.of(adminRole, userRole)));
 
-        User user = new User("Luiza", 16, 2000.00,"kory", "user");
+        User user = new User("Luiza", 16, 2000.00,"koryu", "user");
         user.setUserRoles(new HashSet<>(List.of(userRole)));
 
         this.userService.add(admin);

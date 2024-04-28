@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,16 +25,13 @@ import java.util.stream.Collectors;
 @Service
 public class UserServicelmpl implements UserService{
     private final UserRepository userRepository;
-    private final RoleService roleService;
-
+    @PersistenceContext
     private EntityManager entitiManager;
 
     private ApplicationContext context;
 
-    public UserServicelmpl(UserRepository userRepository, RoleService roleService, EntityManager entitiManager, ApplicationContext context) {
+    public UserServicelmpl(UserRepository userRepository, ApplicationContext context) {
         this.userRepository = userRepository;
-        this.roleService = roleService;
-        this.entitiManager = entitiManager;
         this.context = context;
     }
 
