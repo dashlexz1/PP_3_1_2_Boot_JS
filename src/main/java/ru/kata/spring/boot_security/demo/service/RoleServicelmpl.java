@@ -9,10 +9,7 @@ import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,9 +36,8 @@ public class RoleServicelmpl implements RoleService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<Role> findAll() {
-
-        return roleRepository.findAll();
+    public Set<Role> findAll() {
+        return new HashSet<>(roleRepository.findAll());
     }
 
     @Override
@@ -58,4 +54,12 @@ public class RoleServicelmpl implements RoleService{
         return roleSet;
     }
 
+    public Role findById(Long id){
+        Role retrievedRole = null;
+        Optional<Role> role = roleRepository.findById(id);
+        if (role.isPresent()) {
+            retrievedRole = role.get();
+        }
+        return retrievedRole;
+    }
 }

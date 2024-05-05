@@ -49,7 +49,6 @@ public class UserServicelmpl implements UserService{
     @Transactional
     @Override
     public void update(User user) {
-        setHashPassword(user);
         userRepository.save(user);
 
     }

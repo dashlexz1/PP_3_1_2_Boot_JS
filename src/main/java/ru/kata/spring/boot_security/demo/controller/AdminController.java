@@ -18,6 +18,7 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.service.UserServiceDetail;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.swing.*;
 import java.security.Principal;
 import java.util.*;
@@ -41,12 +42,14 @@ public class AdminController {
     }
 
     @GetMapping
-    public String showUsers(ModelMap model) {
-        User auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public String showUsers(ModelMap model, Principal principal) {
+        User currentUser = userService.findByUsername(principal.getName());
         model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("authUserName", userService.findById(auth.getId()).getUsername());
+        model.addAttribute("currentUser", currentUser);
         StringBuilder sb = new StringBuilder();
-        for (Role r : userService.findById(auth.getId()).getUserRoles()) {
+        Set<Role> roles = roleService.findAll();
+        model.addAttribute("allRoles", roles);
+        for (Role r : userService.findById(currentUser.getId()).getUserRoles()) {
             if (r.getRoleName().equals("ROLE_ADMIN")) {
                 sb.append("ADMIN ");
             }
@@ -55,7 +58,6 @@ public class AdminController {
             }
         }
         model.addAttribute("authUserRole", sb.toString());
-        model.addAttribute("authUser", auth);
         return "adminspage";
     }
 
@@ -71,7 +73,7 @@ public class AdminController {
         User user = new User();
         ModelAndView mav = new ModelAndView("adminspage");
         mav.addObject("user", user);
-        List<Role> roles = roleService.findAll();
+        Set<Role> roles = roleService.findAll();
         mav.addObject("allRoles", roles);
         return mav;
     }
@@ -99,14 +101,12 @@ public class AdminController {
 //        userService.setHashPassword(user);
         ModelAndView mav = new ModelAndView("adminspage");
         mav.addObject("user", user);
-        List<Role> roles = roleService.findAll();
-        mav.addObject("allRoles", roles);
         return mav;
     }
 
-    @PostMapping("/id")
-    public String postEditUserForm(@ModelAttribute("user") UserDto userDto, @RequestParam(value = "roles",required = false) List<String> roles) {
-        User user = userMapper.toModel(userDto);
+    @PostMapping("/{id}")
+    public String postEditUserForm(@PathVariable Long id, @ModelAttribute("user") User user, @RequestParam(value = "roles",required = false) List<String> roles) {
+        userService.findById(id);
         logger.info("POST запрос на редактирование пользователя: {}", user);
         user.setUserRoles( roleService.getSetOfRoles(roles));
         userService.update(user);
