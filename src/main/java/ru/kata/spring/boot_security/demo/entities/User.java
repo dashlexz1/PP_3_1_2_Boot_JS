@@ -39,6 +39,7 @@ public class User implements UserDetails {
             , inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> userRoles;
 
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;
@@ -100,4 +101,9 @@ public class User implements UserDetails {
         return password;
     }
 
+    @Override
+    public String toString() {
+
+        return "User " + userRoles;
+    }
 }

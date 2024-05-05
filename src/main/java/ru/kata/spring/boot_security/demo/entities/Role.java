@@ -17,15 +17,15 @@ import java.util.Set;
 public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name= "id")
+    @Column(name = "id")
     private Long id;
-    @Column(name = "role_name",unique = true)
+    @Column(name = "role_name", unique = true)
     private String roleName;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles"
             , joinColumns = @JoinColumn(name = "role_id")
             , inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User>users;
+    private Set<User> users;
 
     public Role(String role) {
         this.roleName = role;
@@ -53,8 +53,6 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        return "Role{" +
-                "role='" + roleName + '\'' +
-                '}';
+        return roleName;
     }
 }

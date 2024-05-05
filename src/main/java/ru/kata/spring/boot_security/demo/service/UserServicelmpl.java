@@ -16,17 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServicelmpl implements UserService{
     private final UserRepository userRepository;
-    @PersistenceContext
-    private EntityManager entitiManager;
 
     private ApplicationContext context;
 
@@ -35,6 +30,14 @@ public class UserServicelmpl implements UserService{
         this.context = context;
     }
 
+
+    @Transactional(readOnly = true)
+    @Override
+    public String getRoles(User user) {
+        return user.getUserRoles().stream()
+                .map(role -> role.getRoleName().substring(5))
+                .collect(Collectors.joining(" "));
+    }
 
     @Override
     @Transactional
@@ -46,8 +49,8 @@ public class UserServicelmpl implements UserService{
     @Transactional
     @Override
     public void update(User user) {
-        user = entitiManager.merge(user);
         setHashPassword(user);
+        userRepository.save(user);
 
     }
 
