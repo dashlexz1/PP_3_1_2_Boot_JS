@@ -7,24 +7,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 </head>
 <body>
-<header class="navbar navbar-expand-lg navbar-light bg-dark">
-    <div class="ms-3 m-auto">
-        <strong>
-            <th:block th:text="${currentUser.getUsername()}"></th:block>
-        </strong>
-        with roles:
-        <th:block th:text="${authUserRole}"></th:block>
-    </div>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="navbar-right" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto"> <li class="nav-item">
-            <a class="nav-link" href="/logout">Logout</a>
-        </li>
-        </ul>
-    </div>
-</header>
+<th:include th:replace="~{navbar :: navbar}"></th:include>
 <div class = "container">
 <h1>Admin Panel</h1>
 <table class="table">
@@ -48,9 +31,9 @@
     <td th:text="${user.age}"></td>
     <td th:text="${user.username}"></td>
     <td>
-    <dl th:each="role : ${user.getUserRoles()}">
-    <dd th:text="${role.roleName}"></dd>
-    </dl>
+        <dl th:each="role : ${user.getUserRoles()}">
+        <dd th:text="${role.roleName}"></dd>
+        </dl>
     </td>
     <td>
         <button type="button" class="btn btn-primary" data-toggle="modal" th:action="@{/admin/{id}/edit(id=${user.id})}" th:method="get" th:attr="data-target='#editUserModal-'+${user.id}">
@@ -100,8 +83,8 @@
                     <div class="modal-footer">
                         <input class="btn btn-primary"
                                type="submit"
-                               value="Update!"/>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                               value="Update"/>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

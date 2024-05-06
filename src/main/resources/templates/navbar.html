@@ -1,0 +1,18 @@
+<th:block th:fragment="navbar">
+    <header class="navbar navbar-dark text-white bg-dark">
+        <div class="navbar-left" id="navbar">
+            <strong>
+                <th:block th:text="${currentUser.getUsername()}"></th:block>
+            </strong>
+            with roles:
+            <th:block th:text="${authUserRole}"></th:block>
+        </div>
+        <div class="navbar-right" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto"> <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            </ul>
+        </div>
+    </header>
+</th:block>
+

@@ -63,6 +63,7 @@ public class UserServicelmpl implements UserService{
     @Override
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
+
         return userRepository.findAll(Sort.by("id"));
     }
 
