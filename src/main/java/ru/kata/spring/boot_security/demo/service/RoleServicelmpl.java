@@ -44,9 +44,8 @@ public class RoleServicelmpl implements RoleService{
     @Transactional(readOnly = true)
     public Set<Role> getSetOfRoles(List<String> rolesName){
         Set<Role> roleSet = new HashSet<>();
-        for (String roleId: rolesName) {
-            Long id = Long.parseLong(roleId);
-            Role role = roleRepository.findById(id).orElse(null);
+        for (String roleName: rolesName) {
+            Role role = roleRepository.findByRoleName(roleName);
             if (role != null) {
                 roleSet.add(role);
             }

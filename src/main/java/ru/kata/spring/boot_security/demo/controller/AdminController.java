@@ -1,12 +1,9 @@
 package ru.kata.spring.boot_security.demo.controller;
 
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,14 +13,8 @@ import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
-import ru.kata.spring.boot_security.demo.service.UserServiceDetail;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.swing.*;
 import java.security.Principal;
 import java.util.*;
-import java.util.stream.Collectors;
-
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -32,7 +23,8 @@ public class AdminController {
 
     private final UserMapper userMapper;
 
-    private Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    private Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @Autowired
     public AdminController(UserService userService, RoleService roleService, UserMapper userMapper) {
@@ -41,33 +33,26 @@ public class AdminController {
         this.userMapper = userMapper;
     }
 
-    @GetMapping
+    @GetMapping()
     public String showUsers(ModelMap model, Principal principal) {
         User currentUser = userService.findByUsername(principal.getName());
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("currentUser", currentUser);
-        StringBuilder sb = new StringBuilder();
-        Set<Role> roles = roleService.findAll();
-        model.addAttribute("allRoles", roles);
+        model.addAttribute("allRoles", roleService.findAll());
+        StringBuilder sb1 = new StringBuilder();
         for (Role r : userService.findById(currentUser.getId()).getUserRoles()) {
             if (r.getRoleName().equals("ROLE_ADMIN")) {
-                sb.append("ADMIN ");
+                sb1.append("ADMIN ");
             }
             if (r.getRoleName().equals("ROLE_USER")) {
-                sb.append("USER ");
+                sb1.append("USER ");
             }
         }
-        model.addAttribute("authUserRole", sb.toString());
+        model.addAttribute("authUserRoles", sb1.toString());
+
         return "adminspage";
     }
 
-//    @GetMapping()
-//    public String getAllUsers(Model model) {
-//        logger.info("Получаем список всех пользователей");
-//        model.addAttribute("users", userService.getAllUsers());
-//        logger.info("Пользователи успешно получены {}", userService.getAllUsers());
-//        return "allusers";
-//    }
     @GetMapping("/new")
     public ModelAndView newUser() {
         User user = new User();
@@ -79,10 +64,8 @@ public class AdminController {
     }
 
     @PostMapping("/new")
-    public String addUser(@ModelAttribute("user") UserDto userDto, @RequestParam(value = "roles", required = false) List<String> roles) {
+    public String addUser(@ModelAttribute("user") UserDto userDto) {
         User user = userMapper.toModel(userDto);
-        Set<Role> roleSet = roleService.getSetOfRoles(roles);
-        user.setUserRoles(roleSet);
         userService.add(user);
         return "redirect:/admin";
     }
@@ -95,20 +78,21 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/{id}/edit")
-    public ModelAndView editUser(@PathVariable(name = "id") Long id) {
-        User user = userService.findById(id);
-//        userService.setHashPassword(user);
-        ModelAndView mav = new ModelAndView("adminspage");
-        mav.addObject("user", user);
-        return mav;
-    }
+//    @GetMapping("/{id}/edit")
+//    public ModelAndView editUser(@PathVariable(name = "id") Long id) {
+////        User user = userService.findById(id);
+//        ModelAndView mav = new ModelAndView("adminspage");
+////        mav.addObject("user", user);
+//        return mav;
+//    }
 
     @PostMapping("/{id}")
-    public String postEditUserForm(@PathVariable Long id, @ModelAttribute("user") User user, @RequestParam(value = "roles",required = false) List<String> roles) {
-        userService.findById(id);
+    public String postEditUserForm(@PathVariable Long id, @ModelAttribute("user") UserDto userdto) {
+        User user = userMapper.toModel(userdto);
+        if(user.getPassword() == null) {
+            user.setPassword(userService.findById(id).getPassword());
+        }
         logger.info("POST запрос на редактирование пользователя: {}", user);
-        user.setUserRoles( roleService.getSetOfRoles(roles));
         userService.update(user);
         logger.info("Пользователь с id: {} успешно обновлен", user.getId());
         return "redirect:/admin";
