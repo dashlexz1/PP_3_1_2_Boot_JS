@@ -254,13 +254,10 @@
 </table>
     </div>
 </div>
-    <div class="tab-panel fade p-3 border-0 bg-white" id="newUser" role="tabpanel"
+    <div class="tab-panel fade" id="newUser" role="tabpanel"
          aria-labelledby="newUser-tab">
-        <h4 class="p-2 border-0">Add new user</h4>
-        <div class="row">
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-4 text-center">
+        <h4 class="p-2 border-0 bg-gray">Add new user</h4>
+            <div class="container-fluid d-flex justify-content-center align-items-center h-100 text-center bg-white p-3 border-0">
                     <form th:method="POST" th:action="@{/admin/new}">
                         <div class="form-group">
                         <label for=nameUser>Name</label>
