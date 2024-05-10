@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import java.security.Principal;
 import java.util.*;
-@Controller
+@RestController
 @RequestMapping("/admin")
 public class AdminController {
     private final UserService userService;
@@ -33,25 +34,33 @@ public class AdminController {
         this.userMapper = userMapper;
     }
 
-    @GetMapping()
-    public String showUsers(ModelMap model, Principal principal) {
-        User currentUser = userService.findByUsername(principal.getName());
-        model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("currentUser", currentUser);
-        model.addAttribute("allRoles", roleService.findAll());
-        StringBuilder sb1 = new StringBuilder();
-        for (Role r : userService.findById(currentUser.getId()).getUserRoles()) {
-            if (r.getRoleName().equals("ROLE_ADMIN")) {
-                sb1.append("ADMIN ");
-            }
-            if (r.getRoleName().equals("ROLE_USER")) {
-                sb1.append("USER ");
-            }
-        }
-        model.addAttribute("authUserRoles", sb1.toString());
-
-        return "adminspage";
+//    @GetMapping()
+//    public String showUsers(ModelMap model, Principal principal) {
+//        User currentUser = userService.findByUsername(principal.getName());
+//        model.addAttribute("users", userService.getAllUsers());
+//        model.addAttribute("currentUser", currentUser);
+//        model.addAttribute("allRoles", roleService.findAll());
+//        StringBuilder sb1 = new StringBuilder();
+//        for (Role r : userService.findById(currentUser.getId()).getUserRoles()) {
+//            if (r.getRoleName().equals("ROLE_ADMIN")) {
+//                sb1.append("ADMIN ");
+//            }
+//            if (r.getRoleName().equals("ROLE_USER")) {
+//                sb1.append("USER ");
+//            }
+//        }
+//        model.addAttribute("authUserRoles", sb1.toString());
+//
+//        return "adminspage";
+//    }
+@GetMapping
+public ResponseEntity<List<User>> getAllUsers() {
+    List<User> users = userService.getAllUsers();
+    if (users.isEmpty()) {
+        return ResponseEntity.notFound().build(); // Ответ 404 Not Found
     }
+    return ResponseEntity.ok(users); // Ответ 200 OK
+}
 
     @GetMapping("/new")
     public ModelAndView newUser() {
