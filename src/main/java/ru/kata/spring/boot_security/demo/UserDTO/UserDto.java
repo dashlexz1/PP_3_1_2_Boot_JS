@@ -19,5 +19,5 @@ public class UserDto {
     private Double salary;
     private String username;
     private String password;
-    private Set<Role> userRoles;
+    private Set<RoleDTO> roles;
 }

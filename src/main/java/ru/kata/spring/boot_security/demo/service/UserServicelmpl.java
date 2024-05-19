@@ -1,21 +1,13 @@
 package ru.kata.spring.boot_security.demo.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.DAO.UserRepository;
-import ru.kata.spring.boot_security.demo.controller.UserController;
-import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,9 +40,8 @@ public class UserServicelmpl implements UserService{
 
     @Transactional
     @Override
-    public void update(User user) {
-        userRepository.save(user);
-
+    public User update(User user) {
+        return userRepository.save(user);
     }
 
     @Override

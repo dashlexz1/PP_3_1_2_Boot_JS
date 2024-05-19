@@ -15,7 +15,8 @@
                     <a class="nav-link active" id="v-pills-User-tab"
                        data-toggle="pill" href="#v-pills-User"
                        role="tab" aria-controls="v-pills-User"
-                       aria-selected="false">User</a>
+                       aria-selected="true"
+                       sec:authorize="hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')">User</a>
                 </div>
             </div>
 
