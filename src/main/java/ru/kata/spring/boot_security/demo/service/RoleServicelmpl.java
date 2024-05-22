@@ -61,4 +61,9 @@ public class RoleServicelmpl implements RoleService{
         }
         return retrievedRole;
     }
+    @Override
+    public List<Role> getRoles(Long [] ides) {
+        return roleRepository.findAll();
+
+    }
 }

@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.UserDTO.UserDto;
@@ -55,7 +56,7 @@ public class AdminRestController {
         }
     }
 
-    @GetMapping(value = "get/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<UserDto> read(@PathVariable(name = "id") Long id) {
         UserDto userDto = userMapper.toDto(userService.findById(id));
          if (userDto != null)
@@ -66,19 +67,24 @@ public class AdminRestController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<User> update(@PathVariable(name = "id") Long id, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> update(@PathVariable(name = "id") Long id, @RequestBody UserDto userDto) {
         User user = userMapper.toModel(userDto);
+        if(user.getPassword() == null) {
+            user.setPassword(userService.findById(id).getPassword());
+        }
         if (userService.findById(id) != null) {
-            return ResponseEntity.ok(userService.update(user));
+            user = userService.update(user);
+            return ResponseEntity.ok(userMapper.toDto(user));
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @PostMapping(value = "/new")
-    public ResponseEntity<User> create(@RequestBody UserDto userDto) {
+    @PostMapping
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
         User user = userMapper.toModel(userDto);
-        return ResponseEntity.ok(userService.add(user));
+        user = userService.add(user);
+        return ResponseEntity.ok(userMapper.toDto(user));
     }
 
     @DeleteMapping(value = "/{id}")

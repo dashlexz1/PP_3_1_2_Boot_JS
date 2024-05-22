@@ -4,9 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.entities.Role;
-import ru.kata.spring.boot_security.demo.entities.User;
 
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -18,8 +17,15 @@ public class RoleMapper {
         this.modelMapper = modelMapper;
     }
 
-    public Role toModel(RoleDTO dto) {
-        return modelMapper.map(dto, Role.class);
+    Role toModel(RoleDTO role) {
+        return modelMapper.map(role, Role.class);
+    }
+
+    public Set<Role> toModel(Set<RoleDTO> dto) {
+        return dto.stream()
+                .map(this::toModel)
+                .sorted(Comparator.comparing(Role::getId))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
         public RoleDTO toDto(Role role) {
@@ -27,10 +33,9 @@ public class RoleMapper {
     }
 
     public Set<RoleDTO> toDto(Set<Role> userRoles) {
-        return userRoles.stream().map(this::toDto).collect(Collectors.toSet());
-    }
-
-    public Set<Role> toModel(Set<RoleDTO> roles) {
-        return roles.stream().map(this::toModel).collect(Collectors.toSet());
+        return userRoles.stream()
+                .map(this::toDto)
+                .sorted(Comparator.comparing(RoleDTO::getId))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }

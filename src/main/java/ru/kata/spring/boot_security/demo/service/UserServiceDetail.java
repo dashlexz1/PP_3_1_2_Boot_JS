@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.DAO.UserRepository;
 import ru.kata.spring.boot_security.demo.entities.User;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

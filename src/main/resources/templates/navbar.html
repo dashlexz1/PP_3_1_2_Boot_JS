@@ -1,18 +1,17 @@
 <th:block th:fragment="navbar">
-    <header class="navbar navbar-dark text-white bg-dark">
+<header class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
         <div class="navbar-left" id="navbar">
-            <strong>
-                <th:block th:text="${currentUser.getUsername()}"></th:block>
-            </strong>
-            with roles:
-            <th:block th:text="${authUserRoles}"></th:block>
+            <div class="col-11 text-white" id="authorisedUser">
+            </div>
         </div>
         <div class="navbar-right" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto"> <li class="nav-item">
-                <a class="nav-link" href="/login">Logout</a>
-            </li>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/login">Logout</a>
+                </li>
             </ul>
         </div>
-    </header>
+    </div>
+</header>
 </th:block>
-

@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -65,13 +66,10 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        for (Role role : userRoles) {
-            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-        }
-        return authorities;
+        return userRoles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
+                .collect(Collectors.toSet());
     }
     @Override
     public boolean isAccountNonExpired() {
@@ -106,9 +104,5 @@ public class User implements UserDetails {
     public String toString() {
 
         return "User " + userRoles;
-    }
-
-    public UserDetails fromUser() {
-        return new org.springframework.security.core.userdetails.User(username, password, getAuthorities());
     }
 }

@@ -9,12 +9,17 @@ import java.util.Set;
 
 
 public interface RoleService {
-    Role findByRole (String role);
+    Role findByRole(String role);
+
     void save(Role role);
+
     Set<Role> findAll();
 
     Set<Role> getSetOfRoles(List<String> ids);
 
     Role findById(Long id);
 
+    public List<Role> getRoles(Long[] ides);
 }
+
+

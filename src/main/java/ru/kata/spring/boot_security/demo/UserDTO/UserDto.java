@@ -1,11 +1,13 @@
 package ru.kata.spring.boot_security.demo.UserDTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.kata.spring.boot_security.demo.entities.Role;
 
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
