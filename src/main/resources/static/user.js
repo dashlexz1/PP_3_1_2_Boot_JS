@@ -2,7 +2,7 @@ const currentUserPanelData = document.getElementById("currentUserTableBody");
 const authorisedUserData = document.getElementById("authorisedUser");
 
 let currentUser = () => {
-    fetch("http://localhost:8080/api/user", {
+    fetch("http://localhost:9818/api/user", {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -18,11 +18,11 @@ let currentUser = () => {
                             <td>${user.salary}</td>
                             <td>${user.age}</td>
                             <td>${user.username}</td>
-                            <td>${user.roles.map(role => role.name === "ROLE_USER" ? "Юзер" : "Админ").join(", ")}</td>
+                            <td>${user.roles.map(role => role.role === "ROLE_USER" ? "USER" : "ADMIN").join(", ")}</td>
                         </tr>
                     `;
                 authorisedUserData.innerHTML = `
-                        <p class="d-inline font-weight-bold">${user.username} с ролями ${user.roles.map(role => role.name === "ROLE_USER" ? "USER" : "ADMIN").join(", ")}</p>
+                        <p class="d-inline font-weight-light">${user.username} с ролями ${user.roles.map(role => role.role === "ROLE_USER" ? "USER" : "ADMIN").join(", ")}</p>
                     `;
             }
         })
